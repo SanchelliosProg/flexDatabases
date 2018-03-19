@@ -1,6 +1,9 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 using System;
+using System.Collections.Generic;
+using System.Threading;
 using static FlexDatabases.Helpers.ProductsSelectors;
 
 namespace FlexDatabases.Helpers {
@@ -29,6 +32,23 @@ namespace FlexDatabases.Helpers {
             } else {
                 return false;
             }
+        }
+
+        public void clickOnRequestDemoButtonNumber(int blogItemNumber) {
+            List<IWebElement> blogItems = getListOfBlogItems();
+            IWebElement blogItem = blogItems[blogItemNumber];
+            IWebElement button = scrollToThe(blogItem).FindElement(By.CssSelector("a"));
+            button.Click();
+        }
+
+        private IWebElement scrollToThe(IWebElement element) {
+            IJavaScriptExecutor js = driver as IJavaScriptExecutor;
+            js.ExecuteScript("arguments[0].scrollIntoView(true);", element);
+            return element;
+        }
+
+        private List<IWebElement> getListOfBlogItems() {
+            return new List<IWebElement>(driver.FindElements(By.CssSelector(BLOG_ITEM_CARD_LIST)));
         }
     }
 }
